@@ -15,7 +15,7 @@ html {
     flex-grow: 1;
     flex-basis: auto;
     min-width: 600px;
-    /*max-width: 600px;*/
+    max-width: 600px;
     padding: 4em 2em 2em;
     box-sizing: border-box;
     display: flex;
@@ -97,6 +97,12 @@ html {
 
 .cadastrar {
     background-color: #40112D;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+.excluir {
+    background-color: #720f17;
     color: #FFFFFF;
     cursor: pointer;
 }
