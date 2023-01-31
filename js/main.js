@@ -1,6 +1,12 @@
 const form = document.getElementById("novoItem");
 const lista = document.getElementById("lista");
+const botao_exclusao = document.getElementById("botao_exclusao");
 const itens = JSON.parse(localStorage.getItem("itens")) || [];
+
+botao_exclusao.addEventListener("click", () => {
+    localStorage.clear();
+    location.reload();
+})
 
 itens.forEach( (elemento) => {
     criaElemento(elemento);
