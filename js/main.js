@@ -40,7 +40,7 @@ form.addEventListener("submit", (evento) => {
     if (existe) {
         itemAtual.id = existe.id;
         atualizaElemento(itemAtual);
-        itens[existe.id] = itemAtual;
+        itens[existe.findIndex(elemento => elemento.id === existe.id)] = itemAtual;
     } 
     
     //Senão existir um elemento com o mesmo nome na variavel existe:
@@ -48,7 +48,7 @@ form.addEventListener("submit", (evento) => {
     //  -envia o itematual para a função criaElemento;
     //Através do push, adiciona cada objeto ao array itens.
     else {
-        itemAtual.id = itens.length;
+        itemAtual.id = itens[itens.length -1] ? (itens[itens.length-1]).id + 1 : 0
         criaElemento(itemAtual);
         itens.push(itemAtual);
     }
@@ -72,8 +72,8 @@ function criaElemento (itemAtual) {
     numeroItem.innerHTML = itemAtual.quantidade;//Adiciona o valor quantidade recebido na função ao elemento
     numeroItem.dataset.id = itemAtual.id;//Adiciona o valor id recebido na função ao elemento
     novoItem.appendChild(numeroItem);//Manipula o numero item como objeto através do appendChild e adiciona um elemento dentro de outro elemento
-
     novoItem.innerHTML += itemAtual.nome;//adicionando o valor nome recebido na função ao elemento
+    novoItem.appendChild(botaoDeleta(itemAtual.id));//Adiciona ao elemento o retorno da função botaoDeleta
 
     lista.appendChild(novoItem);//Manipula o numero item como objeto através do appendChild e adiciona o elemento novoItem dentro do elemento lista
 }
@@ -81,6 +81,27 @@ function criaElemento (itemAtual) {
 //Recebe o itemAtual, localiza o elemento através do data attribute (data-id) e insere a quantidade que veio no itemAtual
 function atualizaElemento(itemAtual) {
     document.querySelector("[data-id='"+itemAtual.id+"']").innerHTML = itemAtual.quantidade;
+}
+
+//Função que insere um botao de deleção com o texto x ao elemento.
+//O botão criado, ao ser clicado chama a função deletaElemento, enviando o id do itemAtual + o elemento pai do elemento clicado (this.parentNode)
+function botaoDeleta (id) {
+    const elementoBotao = document.createElement("button");
+    elementoBotao.innerText = "x";
+
+    elementoBotao.addEventListener("click", function () {//Arrow functions não carregam o this pra frente, nesse caso foi necessário utilizar uma função anônima
+       //console.log(this.parentNode); 
+       deletaElemento(this.parentNode, id);
+    })
+    return elementoBotao;
+}
+
+//Função que deleta o elemento recebido, apaga o objeto do array itens e seta novamente o localStorage
+function deletaElemento (elemento, id) {
+    elemento.remove();
+    itens.splice(itens.findIndex(elemento => elemento.id === id), 1);
+    localStorage.setItem("itens", JSON.stringify(itens));
+
 }
 
 //Ao clicar no botao "Excluir lista" o localStorage é limpo e a pagina recarregada 
